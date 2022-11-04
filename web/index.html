@@ -14,61 +14,11 @@
 
     <!-- Styles -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/core2.css" rel="stylesheet">
-
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-
     <style>
-        @font-face {
-            font-family: 'icons';
-            src: url('fonts/icons/icons.eot');
-            src: url('fonts/icons/icons.eot') format('embedded-opentype'), url('fonts/icons/icons.ttf') format('truetype'), url('fonts/icons/icons.woff') format('woff'), url('fonts/icons/icons.svg') format('svg');
-            font-weight: normal;
-            font-style: normal;
-        }
-        body {
-            margin: 0;
-            color: #616366;
-            font-family: "微软雅黑", Arial, Helvetica, sans-serif;
-            font-size: 15px;
-            font-weight: 300;
-            line-height: 25px;
-        }
-        small {
-            font-size: 85%;
-        }
         .container table {
             border-spacing: 0;
             border-collapse: collapse;
             margin-bottom: 0;
-        }
-        td,
-        th {
-            padding: 0;
-        }
-        .table-striped > tbody > tr:nth-of-type(odd) {
-            background-color: #f9f9f9;
-        }
-        .table > thead > tr > th,
-        .table > tbody > tr > th,
-        .table > tfoot > tr > th,
-        .table > thead > tr > td,
-        .table > tbody > tr > td,
-        .table > tfoot > tr > td {
-            padding: 8px 10px;
-            line-height: 1.42857143;
-            vertical-align: middle;
-        }
-        * {
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-        }
-        *:before,
-        *:after {
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
         }
         #servers .progress {
             height: 25px;
@@ -82,21 +32,14 @@
         .progress-bar {
             background:linear-gradient(to right, #44ce78 0%,#43ce9f 100%)!important;
         }
-
         .progress-bar-danger{
             background: #d9534f!important;
         }
-        .table {
-            font-size: 0.9rem;
-            font-weight: 800;
-        }
-        .table small {
-            padding-top: 4px;
-            display: block;
-        }
-        .table b {
-            color: #2b3033;
-        }
+        .table tr.accordion-toggle:hover td{background-color: #f7eded}
+
+        .table small {padding-top: 4px;}
+        .table td.text-center small{font-weight: bold;font-size: 16px;}
+        .table .progress-bar{padding-top: 4px;padding-left: 2px;}
         .table > thead > tr > th:first-child,
         .table > tbody > tr > td:first-child,
         .table > tfoot > tr > td:first-child {
@@ -123,24 +66,100 @@
         </div>
 
         <table class="table table-striped">
-            <thead>
+            <thead style="background-color: #e1e1e1;color: #666;">
             <tr>
-                <th id="status4" style="text-align: center;">运行状态</th>
-                <th id="name">节点名</th>
-                <th id="type">类型</th>
-                <th id="location">服务器位置</th>
-                <th id="uptime">在线时间</th>
-                <th id="load">负载</th>
-                <th id="network">网络(B/s) ↓|↑</th>
-                <th id="traffic">流量(B) ↓|↑</th>
-                <th id="cpu">CPU</th>
-                <th id="ram">RAM</th>
-                <th id="hdd">ROM</th>
+                <th class="text-center">状态</th>
+                <th>节点名</th>
+                <th>系统</th>
+                <th>服务器配置</th>
+                <th>在线时间</th>
+                <th>负载</th>
+                <th>IO延迟</th>
+                <th>网络(秒) ↓|↑</th>
+                <th>流量(总) ↓|↑</th>
+                <th>CPU</th>
+                <th>内存</th>
+                <th>磁盘</th>
             </tr>
             </thead>
 
             <tbody id="servers">
-            <!-- Servers here \o/ -->
+            <tr data-toggle="collapse" class="accordion-toggle" data-target="#ext1">
+                <td class="text-center"><small class="text-success">✔</small></td>
+                <td>香港-1</td>
+                <td>KVM</td>
+                <td>HK</td>
+                <td>HK</td>
+                <td>09:30:26</td>
+                <td>0</td>
+                <td>237B | 436B</td>
+                <td>2.48G | 2.64G</td>
+                <td>
+                    <div class="progress progress-striped active">
+                        <div style="width: 0;" class="progress-bar progress-bar-success">0%</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress progress-striped active">
+                        <div style="width: 37%;" class="progress-bar progress-bar-success">37%</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress progress-striped active">
+                        <div style="width: 17%;" class="progress-bar progress-bar-success">17%</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    <div id="ext1" class="accordion-body collapse">
+                        <div>
+                            内存信息: 296.19M / 588.16M<br>
+                            交换分区: 0B / 0B<br>
+                            硬盘信息: 1.98G / 9.72G
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr data-toggle="collapse" class="accordion-toggle" data-target="#ext2">
+                <td class="text-center"><small class="text-danger">✖</small></td>
+                <td>台湾-1</td>
+                <td>KVM</td>
+                <td>HK</td>
+                <td>TW</td>
+                <td>–</td>
+                <td>–</td>
+                <td>–</td>
+                <td>–</td>
+                <td>
+                    <div class="progress progress-striped active">
+                        <div style="width: 100%;" class="progress-bar progress-bar-danger"><small>维护中</small></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress progress-striped active">
+                        <div style="width: 100%;" class="progress-bar progress-bar-danger"><small>维护中</small></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress progress-striped active">
+                        <div style="width: 100%;" class="progress-bar progress-bar-danger"><small>维护中</small></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    <div id="ext2" class="accordion-body collapse">
+                        <div>
+                            加载中
+                        </div>
+                        <div></div>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
 

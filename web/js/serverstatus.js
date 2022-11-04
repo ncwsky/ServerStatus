@@ -58,7 +58,7 @@ function uptime() {
 			if (!TableRow.length) {
 				$("#servers").append(
 					"<tr id=\"r" + i + "\" data-toggle=\"collapse\" data-target=\"#rt" + i + "\" class=\"accordion-toggle " + hack + "\">" +
-						"<td id=\"online4\"><div class=\"progress\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-warning\"><small>加载中</small></div></div></td>" +
+						"<td id=\"online\"><div class=\"progress\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-warning\"><small>加载中</small></div></div></td>" +
 						"<td id=\"name\">加载中</td>" +
 						"<td id=\"type\">加载中</td>" +
 						"<!-- td id=\"host\">加载中</td -->" +
@@ -89,12 +89,12 @@ function uptime() {
 			}
 
 			// Online4
-			if (result.servers[i].online4) {
-				TableRow.children["online4"].children[0].children[0].className = "progress-bar progress-bar-success";
-				TableRow.children["online4"].children[0].children[0].innerHTML = "<small>运行中</small>";
+			if (result.servers[i].online) {
+				TableRow.children["online"].children[0].children[0].className = "progress-bar progress-bar-success";
+				TableRow.children["online"].children[0].children[0].innerHTML = "<small>运行中</small>";
 			} else {
-				TableRow.children["online4"].children[0].children[0].className = "progress-bar progress-bar-danger";
-				TableRow.children["online4"].children[0].children[0].innerHTML = "<small>维护中</small>";
+				TableRow.children["online"].children[0].children[0].className = "progress-bar progress-bar-danger";
+				TableRow.children["online"].children[0].children[0].innerHTML = "<small>维护中</small>";
 			}
 
 			// Name
@@ -108,7 +108,7 @@ function uptime() {
 
 			// Location
 			TableRow.children["location"].innerHTML = result.servers[i].location;
-			if (!result.servers[i].online4 && !result.servers[i].online6) {
+			if (!result.servers[i].online && !result.servers[i].online6) {
 				if (server_status[i]) {
 					TableRow.children["uptime"].innerHTML = "–";
 					TableRow.children["load"].innerHTML = "–";
@@ -236,32 +236,8 @@ function uptime() {
 		error = 0;
 	}).fail(function(update_error) {
 		if (!error) {
-			$("#servers > tr.accordion-toggle").each(function(i) {
-				var TableRow = $("#servers tr#r" + i)[0];
-				var ExpandRow = $("#servers #rt" + i);
-				TableRow.children["online4"].children[0].children[0].className = "progress-bar progress-bar-error";
-				TableRow.children["online4"].children[0].children[0].innerHTML = "<small>错误</small>";
-				//TableRow.children["online6"].children[0].children[0].className = "progress-bar progress-bar-error";
-				//TableRow.children["online6"].children[0].children[0].innerHTML = "<small>错误</small>";
-				TableRow.children["uptime"].innerHTML = "<div class=\"progress progress-striped active\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-error\"><small>错误</small></div></div>";
-				TableRow.children["load"].innerHTML = "<div class=\"progress progress-striped active\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-error\"><small>错误</small></div></div>";
-				TableRow.children["network"].innerHTML = "<div class=\"progress progress-striped active\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-error\"><small>错误</small></div></div>";
-				TableRow.children["traffic"].innerHTML = "<div class=\"progress progress-striped active\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-error\"><small>错误</small></div></div>";
-				TableRow.children["cpu"].children[0].children[0].className = "progress-bar progress-bar-error";
-				TableRow.children["cpu"].children[0].children[0].style.width = "100%";
-				TableRow.children["cpu"].children[0].children[0].innerHTML = "<small>错误</small>";
-				TableRow.children["memory"].children[0].children[0].className = "progress-bar progress-bar-error";
-				TableRow.children["memory"].children[0].children[0].style.width = "100%";
-				TableRow.children["memory"].children[0].children[0].innerHTML = "<small>错误</small>";
-				TableRow.children["hdd"].children[0].children[0].className = "progress-bar progress-bar-error";
-				TableRow.children["hdd"].children[0].children[0].style.width = "100%";
-				TableRow.children["hdd"].children[0].children[0].innerHTML = "<small>错误</small>";
-				if(ExpandRow.hasClass("in")) {
-					ExpandRow.collapse("hide");
-				}
-				TableRow.setAttribute("data-target", "");
-				server_status[i] = false;
-			});
+
+
 		}
 		error = 1;
 		$("#updated").html("更新错误.");
@@ -271,5 +247,5 @@ function uptime() {
 		$("#updated").html("最后更新: " + timeSince(d));
 }
 
-uptime();
+//uptime();
 //setInterval(uptime, 2000);
