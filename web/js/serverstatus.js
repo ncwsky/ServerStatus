@@ -1,10 +1,10 @@
 // serverstatus.js
-var error = 0;
-var d = 0;
-var server_status = new Array();
+let error = 0;
+let d = 0;
+let server_status = [];
 
 function timeSince(date) {
-	if(date == 0)
+	if (date == 0)
 		return "从未.";
 
 	var seconds = Math.floor((new Date() - date) / 1000);
@@ -30,104 +30,27 @@ function timeSince(date) {
 		return "几秒前.";
 }
 
-function bytesToSize(bytes, precision, si)
-{
-	var ret;
-	si = typeof si !== 'undefined' ? si : 0;
-	if(si != 0) {
-		var kilobyte = 1000;
-		var megabyte = kilobyte * 1000;
-		var gigabyte = megabyte * 1000;
-		var terabyte = gigabyte * 1000;
+function toByte(bytes){
+	let v = '-';
+	if (bytes >= 1099511627776) {
+		v = (bytes / 1099511627776).toFixed(2) + 'T';
+	} else if (bytes >= 1073741824) {
+		v = (bytes / 1073741824).toFixed(2) + 'G';
+	} else if (bytes >= 1048576) {
+		v = (bytes / 1048576).toFixed(2) + 'M';
+	} else if (bytes >= 1024) {
+		v = (bytes / 1024).toFixed(2) + 'K';
 	} else {
-		var kilobyte = 1024;
-		var megabyte = kilobyte * 1024;
-		var gigabyte = megabyte * 1024;
-		var terabyte = gigabyte * 1024;
+		v = bytes + 'B';
 	}
-
-	if ((bytes >= 0) && (bytes < kilobyte)) {
-		return bytes + ' B';
-
-	} else if ((bytes >= kilobyte) && (bytes < megabyte)) {
-		ret = (bytes / kilobyte).toFixed(precision) + ' K';
-
-	} else if ((bytes >= megabyte) && (bytes < gigabyte)) {
-		ret = (bytes / megabyte).toFixed(precision) + ' M';
-
-	} else if ((bytes >= gigabyte) && (bytes < terabyte)) {
-		ret = (bytes / gigabyte).toFixed(precision) + ' G';
-
-	} else if (bytes >= terabyte) {
-		ret = (bytes / terabyte).toFixed(precision) + ' T';
-
-	} else {
-		return bytes + ' B';
-	}
-	if(si != 0) {
-		return ret + 'B';
-	} else {
-		return ret + 'iB';
-	}
+	return v;
 }
 
 function uptime() {
 	$.getJSON("json/stats.json", function(result) {
-      
-      var shstr = '<div class="col-lg-4 col-md-4 col-sm-4">'+
-                       ' <div class="panel panel-block panel-block-sm panel-location">'+
-                            '<div class="location-header">'+
-
-                               ' <h3 class="h4"><img src="img/clients/@location.png"> @name <small>@type</small></h3>'+
-                             '   <i class="zmdi zmdi-check-circle @online"></i>'+
-                         '   </div>'+
-                          '  <div class="location-progress">'+
-                          '      <div class="progress progress-sm">'+
-                             '       <div class="progress-bar" style="width: @load%;"></div>'+
-                             '   </div>'+
-                          '  </div>'+
-                           ' <ul class="location-info list-styled">'+
-                           '     <li><span class="list-label">Network @network_rxandnetwork_tx</li>'+
-                           '     <li><span class="list-label">负载状态:</span> @load%</li>'+
-                         '   </ul>'+
-                      '  </div>'+
-                   ' </div>';
-      
-      var shinnerhtml='';
-      
-      
 		$("#loading-notice").remove();
-		if(result.reload)
-			setTimeout(function() { location.reload(true) }, 1000);
 
 		for (var i = 0; i < result.servers.length; i++) {
-          
-          //----kaishi
-          
-          // Network
-				var newnetstr = "";
-				if(result.servers[i].network_rx < 1000)
-					newnetstr += result.servers[i].network_rx.toFixed(0) + "B";
-				else if(result.servers[i].network_rx < 1000*1000)
-					newnetstr += (result.servers[i].network_rx/1000).toFixed(0) + "K";
-				else
-					newnetstr += (result.servers[i].network_rx/1000/1000).toFixed(1) + "M";
-				newnetstr += " | "
-				if(result.servers[i].network_tx < 1000)
-					newnetstr += result.servers[i].network_tx.toFixed(0) + "B";
-				else if(result.servers[i].network_tx < 1000*1000)
-					newnetstr += (result.servers[i].network_tx/1000).toFixed(0) + "K";
-				else
-					newnetstr += (result.servers[i].network_tx/1000/1000).toFixed(1) + "M";
-          
-          shinnerhtml+=shstr.replace("@name",result.servers[i].name).replace("@network_rxandnetwork_tx",newnetstr).replace("@type",result.servers[i].type).replace("@online",result.servers[i].online4?'text-success':'text-error').replace("@location",result.servers[i].location).replace("@load",result.servers[i].load).replace("@load",result.servers[i].load);
-          
-          
-          
-          //----jieshu
-          
-          
-          
 			var TableRow = $("#servers tr#r" + i);
 			var ExpandRow = $("#servers #rt" + i);
 			var hack; // fuck CSS for making me do this
@@ -148,7 +71,7 @@ function uptime() {
 						"<td id=\"memory\"><div class=\"progress progress-striped active\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-warning\"><small>加载中</small></div></div></td>" +
 						"<td id=\"hdd\"><div class=\"progress progress-striped active\"><div style=\"width: 100%;\" class=\"progress-bar progress-bar-warning\"><small>加载中</small></div></div></td>" +
 					"</tr>" +
-					"<tr class=\"expandRow " + hack + "\"><td colspan=\"12\"><div class=\"accordian-body collapse\" id=\"rt" + i + "\">" +
+					"<tr class=\"" + hack + "\"><td colspan=\"12\"><div class=\"accordian-body collapse\" id=\"rt" + i + "\">" +
 						"<div id=\"expand_mem\">加载中</div>" +
 						"<div id=\"expand_swap\">加载中</div>" +
 						"<div id=\"expand_hdd\">加载中</div>" +
@@ -173,15 +96,6 @@ function uptime() {
 				TableRow.children["online4"].children[0].children[0].className = "progress-bar progress-bar-danger";
 				TableRow.children["online4"].children[0].children[0].innerHTML = "<small>维护中</small>";
 			}
-
-			// Online6
-			//if (result.servers[i].online6) {
-			//	TableRow.children["online6"].children[0].children[0].className = "progress-bar progress-bar-success";
-			//	TableRow.children["online6"].children[0].children[0].innerHTML = "<small>开启</small>";
-			//} else {
-			//	TableRow.children["online6"].children[0].children[0].className = "progress-bar progress-bar-danger";
-			//	TableRow.children["online6"].children[0].children[0].innerHTML = "<small>关闭</small>";
-			//}
 
 			// Name
 			TableRow.children["name"].innerHTML = result.servers[i].name;
@@ -293,9 +207,9 @@ function uptime() {
 					TableRow.children["memory"].children[0].children[0].className = "progress-bar progress-bar-success";
 				TableRow.children["memory"].children[0].children[0].style.width = Mem + "%";
 				TableRow.children["memory"].children[0].children[0].innerHTML = Mem + "%";
-				ExpandRow[0].children["expand_mem"].innerHTML = "内存信息: " + bytesToSize(result.servers[i].memory_used*1024, 2) + " / " + bytesToSize(result.servers[i].memory_total*1024, 2);
+				ExpandRow[0].children["expand_mem"].innerHTML = "内存信息: " + toByte(result.servers[i].memory_used*1024) + " / " + toByte(result.servers[i].memory_total*1024);
 				// Swap
-				ExpandRow[0].children["expand_swap"].innerHTML = "交换分区: " + bytesToSize(result.servers[i].swap_used*1024, 2) + " / " + bytesToSize(result.servers[i].swap_total*1024, 2);
+				ExpandRow[0].children["expand_swap"].innerHTML = "交换分区: " + toByte(result.servers[i].swap_used*1024) + " / " + toByte(result.servers[i].swap_total*1024);
 
 				// HDD
 				var HDD = ((result.servers[i].hdd_used/result.servers[i].hdd_total)*100.0).toFixed(0);
@@ -307,7 +221,7 @@ function uptime() {
 					TableRow.children["hdd"].children[0].children[0].className = "progress-bar progress-bar-success";
 				TableRow.children["hdd"].children[0].children[0].style.width = HDD + "%";
 				TableRow.children["hdd"].children[0].children[0].innerHTML = HDD + "%";
-				ExpandRow[0].children["expand_hdd"].innerHTML = "硬盘信息: " + bytesToSize(result.servers[i].hdd_used*1024*1024, 2) + " / " + bytesToSize(result.servers[i].hdd_total*1024*1024, 2);
+				ExpandRow[0].children["expand_hdd"].innerHTML = "硬盘信息: " + toByte(result.servers[i].hdd_used*1024*1024) + " / " + toByte(result.servers[i].hdd_total*1024*1024);
 
 				// Custom
 				if (result.servers[i].custom) {
@@ -317,8 +231,7 @@ function uptime() {
 				}
 			}
 		};
-      console.log(shinnerhtml);
-$('#cards').html(shinnerhtml);
+
 		d = new Date(result.updated*1000);
 		error = 0;
 	}).fail(function(update_error) {
@@ -353,82 +266,10 @@ $('#cards').html(shinnerhtml);
 		error = 1;
 		$("#updated").html("更新错误.");
 	});
-}
 
-function updateTime() {
 	if (!error)
 		$("#updated").html("最后更新: " + timeSince(d));
 }
 
 uptime();
-updateTime();
-setInterval(uptime, 2000);
-setInterval(updateTime, 500);
-
-
-// styleswitcher.js
-function setActiveStyleSheet(title) {
-	var i, a, main;
-	for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-		if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title")) {
-			a.disabled = true;
-			if(a.getAttribute("title") == title) a.disabled = false;
-		}
-	}
-}
-
-function getActiveStyleSheet() {
-	var i, a;
-	for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-		if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title") && !a.disabled)
-			return a.getAttribute("title");
-	}
-	return null;
-}
-
-function getPreferredStyleSheet() {
-	var i, a;
-	for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-		if(a.getAttribute("rel").indexOf("style") != -1	&& a.getAttribute("rel").indexOf("alt") == -1 && a.getAttribute("title"))
-			return a.getAttribute("title");
-	}
-return null;
-}
-
-function createCookie(name,value,days) {
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime()+(days*24*60*60*1000));
-		var expires = "; expires="+date.toGMTString();
-	}
-	else expires = "";
-	document.cookie = name+"="+value+expires+"; path=/";
-}
-
-function readCookie(name) {
-	var nameEQ = name + "=";
-	var ca = document.cookie.split(';');
-	for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ')
-			c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0)
-			return c.substring(nameEQ.length,c.length);
-	}
-	return null;
-}
-
-window.onload = function(e) {
-	var cookie = readCookie("style");
-	var title = cookie ? cookie : getPreferredStyleSheet();
-	setActiveStyleSheet(title);
-}
-
-window.onunload = function(e) {
-	var title = getActiveStyleSheet();
-	createCookie("style", title, 365);
-}
-
-var cookie = readCookie("style");
-var title = cookie ? cookie : getPreferredStyleSheet();
-setActiveStyleSheet(title);
+//setInterval(uptime, 2000);
