@@ -50,6 +50,18 @@
         .table > tfoot > tr > td:last-child {
             padding-right: 5px;
         }
+        .text-danger {
+            color:red
+        }
+        .text-success{
+            color: #20a53a;
+        }
+        .text-warning {
+            color:#ff9900
+        }
+        .text-warning:hover {
+            color: #ff7700
+        }
     </style>
 </head>
 
@@ -91,8 +103,8 @@
                 <td>HK</td>
                 <td>HK</td>
                 <td>09:30:26</td>
-                <td>0</td>
-                <td>237B | 436B</td>
+                <td><span class="text-danger">100</span></td>
+                <td><span class="text-warning">3MB</span> | <span class="text-success">436B</span></td>
                 <td>2.48G | 2.64G</td>
                 <td>
                     <div class="progress progress-striped active">

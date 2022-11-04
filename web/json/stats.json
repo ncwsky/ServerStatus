@@ -20,26 +20,6 @@
 			"custom": ""
 		},
 		{
-			"name": "香港-2",
-			"host": "None",
-			"location": "HK",
-			"online": true,
-			"uptime": "08:41:24",
-			"load": 2.00,
-			"network_rx": 252318,
-			"network_tx": 253819,
-			"network_in": 1895139012,
-			"network_out": 1914511416,
-			"cpu": 4,
-			"memory_total": 602280,
-			"memory_used": 303296,
-			"swap_total": 0,
-			"swap_used": 0,
-			"hdd_total": 9951,
-			"hdd_used": 2025,
-			"custom": ""
-		},
-		{
 			"name": "台湾-1",
 			"host": "None",
 			"location": "TW",
